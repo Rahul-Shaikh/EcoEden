@@ -1,7 +1,7 @@
 class AppRoutes {
-  static const home = "/";
+  static const signup = "/";
   static const profile = "/profile";
-  static const signup = "/signup";
+  static const home = "/";
   static const login = "/login";
   static const feed = "/feed";
   static const camera = "/camera";

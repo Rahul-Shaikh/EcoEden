@@ -1,12 +1,14 @@
 
 
+import 'package:ecoeden_redux/model/user.dart';
+
 class Feed {
 
   final int id;
   final String image;
   final String createdAt;
   final bool trash;
-  final String user;
+  final User user;
   final String lat;
   final String lng;
   final String description;
@@ -19,6 +21,21 @@ class Feed {
     this.lat,
     this.lng,
     this.description});
+
+
+
+  factory Feed.initial(){
+    return new Feed( 
+      image : "" ,
+      createdAt: "",
+      id: 0, 
+      trash: false,
+      user: null,
+      lat : "",
+      lng : "",
+      description: ""
+    ); 
+  }
 
   factory Feed.fromJson(Map<String,dynamic> json) {
 

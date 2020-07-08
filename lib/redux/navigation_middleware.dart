@@ -2,12 +2,15 @@ import 'package:redux/redux.dart';
 import 'package:ecoeden_redux/main.dart';
 import 'package:ecoeden_redux/redux/actions.dart';
 import 'package:ecoeden_redux/redux/app_state.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-List<Middleware<AppState>> createNavigationMiddleware() {
+List<Middleware<AppState>> createMiddleware() {
   return [
     TypedMiddleware<AppState, NavigateReplaceAction>(_navigateReplace),
     TypedMiddleware<AppState, NavigatePushAction>(_navigate),
+    thunkMiddleware,
   ];
+
 }
 
 _navigateReplace(Store<AppState> store, action, NextDispatcher next) {

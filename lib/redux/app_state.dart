@@ -22,11 +22,21 @@ class AppState{
    AppState({
      this.isLoading = false ,  
      this.feeds = const [] , 
-     this.route = const [AppRoutes.home],
+     this.route = const [AppRoutes.signup],
      this.user = null 
    });
 
    factory AppState.loading() => AppState(isLoading: true);
+
+   factory AppState.initial(){
+
+     return new AppState(
+       feeds: [] , 
+        route: [],
+        user: User.initial(),
+        isLoading: false
+       );
+   }
 
    AppState copyWith({
      bool isLoading, 

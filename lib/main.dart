@@ -1,3 +1,4 @@
+import 'package:ecoeden_redux/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -7,6 +8,8 @@ import 'package:ecoeden_redux/redux/app_state.dart';
 import 'package:ecoeden_redux/redux/navigation_middleware.dart';
 import 'package:ecoeden_redux/redux/reducers/app_reducer.dart';
 import 'package:ecoeden_redux/route_aware_widget.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,36 +18,38 @@ void main() => runApp(MyApp());
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  final store = Store<AppState>(appReducer,
+  
+  final store = Store<AppState>(
+      appReducer,
       initialState: AppState.loading(),
-      middleware: createNavigationMiddleware());
+      middleware: createMiddleware(),
+      );
 
-
-    final theme = ThemeData(
-      primaryColor: Colors.grey.shade900,
-      primaryColorLight: Colors.grey.shade800,
-      primaryColorDark: Colors.black,
-      scaffoldBackgroundColor: Colors.grey.shade800,
-  //          textTheme: TextTheme(
-  //            body1: TextStyle(color: Colors.white),
-  //            display1: TextStyle(color: Colors.white),
-  //            title: TextStyle(color: Colors.white),
-  //          ),
-      iconTheme: IconThemeData(color: Colors.white),
-      accentColor: Colors.yellow[500],
-  );
+  //   final theme = ThemeData(
+  //     primaryColor: Colors.grey.shade900,
+  //     primaryColorLight: Colors.grey.shade800,
+  //     primaryColorDark: Colors.black,
+  //     scaffoldBackgroundColor: Colors.grey.shade800,
+  // //          textTheme: TextTheme(
+  // //            body1: TextStyle(color: Colors.white),
+  // //            display1: TextStyle(color: Colors.white),
+  // //            title: TextStyle(color: Colors.white),
+  // //          ),
+  //     iconTheme: IconThemeData(color: Colors.white),
+  //     accentColor: Colors.yellow[500],
+  // );
 
 
 
  // define  all the routes here 
   MaterialPageRoute _getRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case AppRoutes.home:
-      //   return MainRoute(HomePage(), settings: settings);
+      case AppRoutes.home:
+        return MainRoute(RegisterPage(), settings: settings);
       // case AppRoutes.addGame:
       //   return FabRoute(NewGame(), settings: settings);
-      // default:
-      //   return MainRoute(StubScreen(), settings: settings);
+      default:
+        return MainRoute(RegisterPage(), settings: settings);
     }
   }
 
@@ -56,7 +61,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         navigatorObservers: [routeObserver],
         title: AppLocalizations.appTitle,
-        theme: theme,
+        // theme: theme,
         onGenerateRoute: (RouteSettings settings) => _getRoute(settings),
       ),
     );
@@ -77,7 +82,8 @@ class MainRoute<T> extends MaterialPageRoute<T> {
     // if (settings.isInitialRoute) return child;
     // Fades between routes. (If you don't want any animation,
     // just return child.)
-    return FadeTransition(opacity: animation, child: child);
+    // return FadeTransition(opacity: animation, child: child);
+    return child;
   }
 }
 
