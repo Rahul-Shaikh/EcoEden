@@ -1,14 +1,3 @@
-//import 'package:flutter/material.dart';
-//import 'package:meta/meta.dart';
-//import 'signup_page.dart';
-//import 'home_page.dart';
-//import 'dart:convert';
-//import 'package:ecoeden/services/webservice.dart';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-//import 'package:http/http.dart' as http;
-//import 'package:provider/provider.dart';
-
-import 'package:ecoeden/models/user.dart';
 import 'package:ecoeden/redux/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';

@@ -1,7 +1,7 @@
-import 'package:ecoeden/screens/feeds_page.dart';
 import 'package:ecoeden/screens/home_page.dart';
 import 'package:ecoeden/screens/login_page.dart';
 import 'package:ecoeden/screens/signup_page.dart';
+import 'package:ecoeden/screens/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -11,8 +11,6 @@ import 'package:ecoeden/redux/app_state.dart';
 import 'package:ecoeden/redux/navigation_middleware.dart';
 import 'package:ecoeden/redux/reducers/app_reducer.dart';
 import 'package:ecoeden/route_aware_widget.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart' ;
 
 void main() => runApp(MyApp());
@@ -28,21 +26,6 @@ class MyApp extends StatelessWidget {
     initialState: AppState.loading(),
     middleware: createMiddleware(),
   );
-
-  //   final theme = ThemeData(
-  //     primaryColor: Colors.grey.shade900,
-  //     primaryColorLight: Colors.grey.shade800,
-  //     primaryColorDark: Colors.black,
-  //     scaffoldBackgroundColor: Colors.grey.shade800,
-  // //          textTheme: TextTheme(
-  // //            body1: TextStyle(color: Colors.white),
-  // //            display1: TextStyle(color: Colors.white),
-  // //            title: TextStyle(color: Colors.white),
-  // //          ),
-  //     iconTheme: IconThemeData(color: Colors.white),
-  //     accentColor: Colors.yellow[500],
-  // );
-
 
 
   // define  all the routes here
@@ -75,6 +58,7 @@ class MyApp extends StatelessWidget {
         title: AppLocalizations.appTitle,
         // theme: theme,
         onGenerateRoute: (RouteSettings settings) => _getRoute(settings),
+          home: SplashScreen(),
       ),
     );
   }

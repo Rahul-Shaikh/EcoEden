@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
 
   void _fetch() async {
     await getCurrentLocation();
-    print(FeedsPageState.nextPage);
     while (FeedsPageState.nextPage != null) {
       await _fetchNewsArticles();
     }
@@ -157,23 +156,24 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: _child,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: FloatingActionButton(
-          child: Icon(Icons.add_a_photo),
-          onPressed: () {
-            Navigator.of(context).push(
-              new MaterialPageRoute(builder: (context) => new ImageInput()),
-            );
-          },
-        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_a_photo),
+        backgroundColor: Colors.lightBlue,
+        elevation: 2.0,
+        onPressed: () {
+          Navigator.of(context).push(
+            new MaterialPageRoute(builder: (context) => new ImageInput()),
+          );
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 40.0,
           color: Color(0xEF4285f4),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
                 icon: Icon(FontAwesomeIcons.home),
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
               ),
               IconButton(
 //                color: Colors.black,
-                icon: Icon(FontAwesomeIcons.newspaper),
+                icon: Icon(FontAwesomeIcons.newspaper,),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -192,6 +192,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        shape: CircularNotchedRectangle(),
       ),
     );
   }

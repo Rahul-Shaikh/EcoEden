@@ -23,7 +23,8 @@ class _ImageInput extends State<ImageInput> {
   bool _isUploading = false;
 
   String baseUrl = 'https://api.ecoeden.xyz/photos/';
-  TextEditingController _descriptionController;
+  final _descriptionController =  TextEditingController();
+
   void _getImage(BuildContext context, ImageSource source) async {
     File image = await ImagePicker.pickImage(source: source);
 
@@ -58,10 +59,10 @@ class _ImageInput extends State<ImageInput> {
     // Which creates some problem at the server side to manage
     // or verify the file extension
 //    imageUploadRequest.fields['ext'] = mimeTypeData[1];
-    imageUploadRequest.fields['user'] = 'http://api.ecoeden.xyz/users/11/';
+    imageUploadRequest.fields['user'] = 'http://api.ecoeden.xyz/users/1/';
     imageUploadRequest.fields['lat'] = '30.5928';
     imageUploadRequest.fields['lng'] = '114.3055';
-    imageUploadRequest.fields['description'] = _descriptionController.text;
+    imageUploadRequest.fields['description'] =  _descriptionController.text;//"Anonymous post";
     imageUploadRequest.files.add(file);
 
     try {
@@ -85,6 +86,7 @@ class _ImageInput extends State<ImageInput> {
   }
 
   void _startUploading() async {
+
     final Map<String, dynamic> response = await _uploadImage(_imageFile);
     print(response);
     // Check if any error occured
@@ -101,13 +103,12 @@ class _ImageInput extends State<ImageInput> {
     setState(() {
       _isUploading = false;
       _imageFile = null;
-      _descriptionController.clear();
+      //_descriptionController.clear();
     });
   }
 
   void _openImagePickerModal(BuildContext context) {
     final flatButtonColor = Theme.of(context).primaryColor;
-    print('Image Picker Modal Called');
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -175,9 +176,7 @@ class _ImageInput extends State<ImageInput> {
 
     if (_isUploading) {
       // File is being uploaded then show a progress indicator
-      btnWidget = Container(
-          margin: EdgeInsets.only(top: 10.0),
-          child: CircularProgressIndicator());
+      btnWidget = Container();
     } else if (!_isUploading && _imageFile != null) {
       btnWidget = Padding(
         padding: EdgeInsets.fromLTRB(10.0,10.0,10.0,0.0),
@@ -193,10 +192,10 @@ class _ImageInput extends State<ImageInput> {
 //            color: Colors.grey,
 //          ),
           ),
-          validator: (value) =>
-          value.isEmpty
-              ? 'Email cant\'t be empty.'
-              : null,
+//          validator: (value) =>
+//          value.isEmpty
+//              ? 'Email cant\'t be empty.'
+//              : null,
           //onSaved: (value) => _email = value.trim(),
         ),
       );

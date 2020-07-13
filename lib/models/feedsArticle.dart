@@ -28,7 +28,6 @@ class FeedsArticle {
   });
 
   factory FeedsArticle.fromJson(Map<String,dynamic> json) {
-    print("In feeds articles" + json['upvotes'].toString());
     return FeedsArticle(
       id: json['id'],
       image: json['image'],
