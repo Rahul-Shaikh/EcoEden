@@ -1,14 +1,11 @@
+import 'package:ecoeden/main.dart';
 import 'package:ecoeden/models/user.dart';
 import 'package:ecoeden/redux/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:ecoeden/redux/app_state.dart';
-
-
-
-
-
+import 'package:loading_overlay/loading_overlay.dart';
 
 class RegisterPage extends StatelessWidget{
 
@@ -214,7 +211,7 @@ class RegisterPage extends StatelessWidget{
                 password : confirmPassword.text,
 
               );
-              vm.signup(nuser);
+              vm.signup(nuser,context);
 
 
             },
@@ -236,23 +233,28 @@ class RegisterPage extends StatelessWidget{
     }
 
     Widget showForm(BuildContext c , _ViewModel vm) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              showLogo(),
-              showNameInput(),
-              showUserNameInput(),
-              showMobileNumberInput(),
-              showEmailInput(),
-              showPasswordInput(),
-              showConfirmPasswordInput(),
-              showPrimaryButton(vm),
-              showSecondaryButton(c),
-            ],
+      return LoadingOverlay(
+        opacity: 0.5,
+        isLoading: global_store.state.isLoading,
+        progressIndicator: CircularProgressIndicator(),
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                showLogo(),
+                showNameInput(),
+                showUserNameInput(),
+                showMobileNumberInput(),
+                showEmailInput(),
+                showPasswordInput(),
+                showConfirmPasswordInput(),
+                showPrimaryButton(vm),
+                showSecondaryButton(c),
+              ],
+            ),
           ),
         ),
       );
@@ -282,13 +284,14 @@ class RegisterPage extends StatelessWidget{
 
 
 class _ViewModel{
-  final Function(User) signup;
+  final Function(User,BuildContext) signup;
   _ViewModel({
-    this.signup
+    this.signup,
   });
   factory _ViewModel.create(Store<AppState> store){
-    _signup(User user){
-      store.dispatch(new SignupAction(user: user).signup());
+    _signup(User user,BuildContext context){
+      store.dispatch(new LoadingStartAction());
+      store.dispatch(new SignupAction(user: user,context: context).signup());
     }
     return _ViewModel(
         signup: _signup

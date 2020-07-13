@@ -8,6 +8,9 @@ import 'package:redux/redux.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
+import 'package:ecoeden/screens/login_page.dart';
+
 
 const URL = 'https://api.ecoeden.xyz/auth/';
 
@@ -43,11 +46,27 @@ class NavigatePopAction {
   }
 }
 
+class LoadingStartAction{
+  @override
+  String toString() {
+    return 'LoadingStartAction';
+  }
+}
+
+class LoadingEndAction{
+  @override
+  String toString() {
+    return 'LoadingEndAction';
+  }
+}
+
 class SignupAction{
   final User user;
+  final BuildContext context;
 
   SignupAction({
-    @required this.user
+    @required this.user,
+    @required this.context
   });
 
 
@@ -55,8 +74,13 @@ class SignupAction{
     return (Store<AppState> store) async {
 
       createUser( CREATE_POST_URL , body: user.toMap() ).then((user) => {
-        store.dispatch(NavigatePushAction(AppRoutes.login))
-
+        store.dispatch(LoadingEndAction()),
+      if (user.userName == null) {
+      Toast.show("Username exists or Wrong Credentials!!!", context,
+      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+      }else {
+          store.dispatch(NavigatePushAction(AppRoutes.login)),
+        }
       }).catchError((e){
         print(e);
       });
@@ -76,10 +100,12 @@ class SignupAction{
 class LoginAction{
   final String username;
   final String password;
+  final BuildContext context;
 
   LoginAction({
     @required this.username,
-    @required this.password
+    @required this.password,
+    @required this.context
   });
 
 
@@ -87,7 +113,14 @@ class LoginAction{
     return (Store<AppState> store) async {
 
       await attemptLogIn(username, password).then((String jwt) => {
+        store.dispatch(LoadingEndAction()),
+      if (jwt == null) {
+          Toast.show("Incorrect username or password!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+      }else{
+        //lp.setLoader();
         store.dispatch(NavigatePushAction(AppRoutes.home))
+      }
       }).catchError((e){
         print(e);
       });
@@ -117,6 +150,8 @@ Future<User> createUser(String url, {Map body}) async {
 }
 
 Future<String> attemptLogIn(String username, String password) async {
+  //lp.setLoader();
+
   print(username);
   print(password);
   var res = await http.post(

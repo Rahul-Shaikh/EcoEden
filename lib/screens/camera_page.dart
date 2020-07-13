@@ -212,7 +212,6 @@ class _ImageInput extends State<ImageInput> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            descriptionField(),
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
               child: OutlineButton(
@@ -240,6 +239,7 @@ class _ImageInput extends State<ImageInput> {
               alignment: Alignment.topCenter,
               width: MediaQuery.of(context).size.width,
             ),
+            descriptionField(),
             _buildUploadBtn(),
           ],
         ),

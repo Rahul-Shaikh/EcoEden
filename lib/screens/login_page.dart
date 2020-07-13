@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:ecoeden/redux/app_state.dart';
-
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ecoeden/main.dart';
 import '../app_routes.dart';
 
 const URL = 'https://api.ecoeden.xyz/auth/';
 
-class LoginPage extends StatelessWidget {
-  final _formKey = new GlobalKey<FormState>();
+class LoginPage extends StatelessWidget  {
 
   //String _email;
   //String _password;
@@ -111,26 +111,7 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
               onPressed: () async {
-//                var jwt = await attemptLogIn(
-//                    _usernameController.text, _passwordController.text);
-//                final token = json.decode(jwt);
-//                print(token['token']);
-//                Provider.of<API_KEY>(context, listen: false).set_key(
-//                    token['token']);
-//                if (jwt != null) {
-//                  storage.write(key: "jwt", value: jwt);
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) =>
-//                          HomePage(
-//                            accEmail: 'sandipans814@gmail.com',
-//                            accName: 'Sandipan Saha',
-//                          ),
-//                    ),
-//                  );
-//                }
-              vm.login(_usernameController.text, _passwordController.text);
+              vm.login(_usernameController.text, _passwordController.text,context);
               }),
         ),
       );
@@ -155,23 +136,30 @@ class LoginPage extends StatelessWidget {
 
     // User login form
     Widget showForm(BuildContext c , _ViewModel vm) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              showLogo(),
-              showUserNameInput(),
-              showPasswordInput(),
-              showPrimaryButton(vm),
-              showSecondaryButton(c),
-            ],
+      return LoadingOverlay(
+        isLoading: global_store.state.isLoading,
+        opacity: 0.5,
+        progressIndicator: CircularProgressIndicator(),
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            //key: _formKey,
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                showLogo(),
+                showUserNameInput(),
+                showPasswordInput(),
+                showPrimaryButton(vm),
+                showSecondaryButton(c),
+              ],
+            ),
           ),
         ),
       );
     }
+
+
     return Scaffold(
 
       appBar: AppBar(
@@ -194,13 +182,14 @@ class LoginPage extends StatelessWidget {
 
 
 class _ViewModel{
-  final Function(String, String) login;
+  final Function(String, String,BuildContext) login;
   _ViewModel({
     this.login
   });
   factory _ViewModel.create(Store<AppState> store){
-    _login(String username, String password){
-      store.dispatch(new LoginAction(username: username, password: password).login());
+    _login(String username, String password,BuildContext context){
+      store.dispatch(new LoadingStartAction());
+      store.dispatch(new LoginAction(username: username, password: password,context: context).login());
     }
     return _ViewModel(
         login: _login

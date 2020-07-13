@@ -12,21 +12,24 @@ import 'package:ecoeden/redux/navigation_middleware.dart';
 import 'package:ecoeden/redux/reducers/app_reducer.dart';
 import 'package:ecoeden/route_aware_widget.dart';
 import 'package:flutter/services.dart' ;
+ Store<AppState> global_store;
+void main(){
+  global_store = Store<AppState>(
+    appReducer,
+    initialState: AppState.initial(),
+    middleware: createMiddleware(),
+  );
 
-void main() => runApp(MyApp());
+  runApp(MyApp());
+
+}
 
 
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
+
 class MyApp extends StatelessWidget {
-
-  final store = Store<AppState>(
-    appReducer,
-    initialState: AppState.loading(),
-    middleware: createMiddleware(),
-  );
-
 
   // define  all the routes here
   MaterialPageRoute _getRoute(RouteSettings settings) {
@@ -50,7 +53,7 @@ class MyApp extends StatelessWidget {
     ]);
 
     return StoreProvider(
-      store: store,
+      store: global_store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,

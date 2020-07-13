@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecoeden/screens/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -165,8 +166,8 @@ class _PostState extends State<Post> {
                   //Image.asset('assets/profile.jpg'),
                    widget.imageUrl== null
                       ? Image.asset('assets/profile.jpg')
-                      : Image.network(
-                      widget.imageUrl),
+                      : CachedNetworkImage(
+                      imageUrl: widget.imageUrl),
                   widget.showHeartOverlay ?
                   Icon(
                     FontAwesomeIcons.solidTrashAlt, color: Colors.white54,
