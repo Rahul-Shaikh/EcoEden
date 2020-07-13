@@ -29,7 +29,6 @@ dependencies:
   geolocator:
   flutter_spinkit:
   search_map_place:
-  camera:
   image_picker:
   path_provider:
   path:
@@ -46,6 +45,7 @@ dependencies:
   toast: ^0.1.5
   cached_network_image: ^2.2.0+1
   loading_overlay: ^0.2.1
+  
 
 
 

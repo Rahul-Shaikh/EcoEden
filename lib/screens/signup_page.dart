@@ -7,6 +7,9 @@ import 'package:redux/redux.dart';
 import 'package:ecoeden/redux/app_state.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
+
+
+
 class RegisterPage extends StatelessWidget{
 
   final _formKey = new GlobalKey<FormState>();

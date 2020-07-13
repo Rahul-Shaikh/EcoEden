@@ -12,6 +12,10 @@ import 'package:ecoeden/redux/navigation_middleware.dart';
 import 'package:ecoeden/redux/reducers/app_reducer.dart';
 import 'package:ecoeden/route_aware_widget.dart';
 import 'package:flutter/services.dart' ;
+
+import 'screens/camera_page.dart';
+import 'screens/feeds_page.dart';
+
  Store<AppState> global_store;
 void main(){
   global_store = Store<AppState>(
@@ -40,6 +44,10 @@ class MyApp extends StatelessWidget {
         return MainRoute(LoginPage(), settings: settings);
      case AppRoutes.signup:
        return MainRoute(RegisterPage(), settings: settings);
+      case AppRoutes.camera:
+        return MainRoute(ImageInput(), settings: settings);
+      case AppRoutes.feed:
+        return MainRoute(FeedsPage(), settings: settings);
       default:
         return MainRoute(LoginPage(), settings: settings);
     }
@@ -81,8 +89,8 @@ class MainRoute<T> extends MaterialPageRoute<T> {
     // if (settings.isInitialRoute) return child;
     // Fades between routes. (If you don't want any animation,
     // just return child.)
-    // return FadeTransition(opacity: animation, child: child);
-    return child;
+     return FadeTransition(opacity: animation, child: child);
+//    return child;
   }
 }
 

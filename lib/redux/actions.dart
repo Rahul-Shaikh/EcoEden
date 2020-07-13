@@ -3,6 +3,7 @@ import 'package:ecoeden/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import '../app_routes.dart';
 import 'app_state.dart';
 import 'package:redux/redux.dart';
 import 'dart:async';
@@ -10,7 +11,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'package:ecoeden/screens/login_page.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 const URL = 'https://api.ecoeden.xyz/auth/';
 
@@ -60,6 +61,29 @@ class LoadingEndAction{
   }
 }
 
+class LogoutAction{
+  @override
+  String toString() {
+    return 'LogoutAction';
+  }
+
+
+  ThunkAction<AppState> logout() {
+    print('Inside logout');
+    return (Store<AppState> store) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        print(prefs.getString('user'));
+        if (prefs.getString('user') != null) {
+          prefs.remove('user');
+        }
+        print(prefs.getString('user'));
+        print(store.state.route.toString());
+        store.dispatch(NavigatePushAction(AppRoutes.login));
+        print(store.state.route.toString());
+    };
+  }
+}
+
 class SignupAction{
   final User user;
   final BuildContext context;
@@ -72,6 +96,10 @@ class SignupAction{
 
   ThunkAction<AppState> signup( ){
     return (Store<AppState> store) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if ( prefs.getString('user') != null ){
+        store.dispatch(NavigatePushAction(AppRoutes.home));
+      }
 
       createUser( CREATE_POST_URL , body: user.toMap() ).then((user) => {
         store.dispatch(LoadingEndAction()),
@@ -111,6 +139,10 @@ class LoginAction{
 
   ThunkAction<AppState> login( ){
     return (Store<AppState> store) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if ( prefs.getString('user') != null){
+        store.dispatch(NavigatePushAction(AppRoutes.home));
+      }
 
       await attemptLogIn(username, password).then((String jwt) => {
         store.dispatch(LoadingEndAction()),
@@ -118,8 +150,8 @@ class LoginAction{
           Toast.show("Incorrect username or password!!!", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
       }else{
-        //lp.setLoader();
-        store.dispatch(NavigatePushAction(AppRoutes.home))
+        prefs.setString('user', jwt),
+        store.dispatch(NavigatePushAction(AppRoutes.home)),
       }
       }).catchError((e){
         print(e);

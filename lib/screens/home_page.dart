@@ -2,7 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../app_routes.dart';
+import '../app_routes.dart';
+import '../main.dart';
+import '../main.dart';
+import '../main.dart';
+import '../main.dart';
 import '../models/feedsArticle.dart';
+import '../redux/actions.dart';
+import '../redux/actions.dart';
 import 'login_page.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -162,9 +170,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.lightBlue,
         elevation: 2.0,
         onPressed: () {
-          Navigator.of(context).push(
-            new MaterialPageRoute(builder: (context) => new ImageInput()),
-          );
+          global_store.dispatch(new NavigatePushAction(AppRoutes.camera));
         },
       ),
       bottomNavigationBar: BottomAppBar(
@@ -183,10 +189,7 @@ class _HomePageState extends State<HomePage> {
 //                color: Colors.black,
                 icon: Icon(FontAwesomeIcons.newspaper,),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FeedsPage()),
-                  );
+                  global_store.dispatch(new NavigatePushAction(AppRoutes.feed));
                 },
               ),
             ],
@@ -302,10 +305,7 @@ Widget showPrimaryButton(BuildContext context) {
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
+          global_store.dispatch(new LogoutAction().logout());
         },
       ),
     ),

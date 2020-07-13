@@ -8,6 +8,9 @@ import 'dart:async';
 import 'package:http_parser/http_parser.dart';
 import 'package:toast/toast.dart';
 
+import '../main.dart';
+import '../redux/actions.dart';
+
 class ImageInput extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -32,8 +35,7 @@ class _ImageInput extends State<ImageInput> {
       _imageFile = image;
     });
 
-    // Closes the bottom sheet
-    Navigator.pop(context);
+    global_store.dispatch(new NavigatePopAction());
   }
 
   Future<Map<String, dynamic>> _uploadImage(File image) async {

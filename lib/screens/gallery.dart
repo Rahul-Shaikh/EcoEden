@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/files.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
