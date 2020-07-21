@@ -89,6 +89,19 @@ class _PostState extends State<Post> {
   }
 
 
+
+
+  Color get_color( ){
+    if ( widget.upvotes < 5) {
+      return Colors.grey;
+    }
+    else{
+      return Colors.red;
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //print(widget.upvotes.runtimeType);
@@ -97,15 +110,30 @@ class _PostState extends State<Post> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             PostHeader(widget.user),
-            ListTile(
-              //contentPadding: EdgeInsets.all(20.0),
-              leading: Text(
-                widget.description,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                ),
-                textAlign: TextAlign.left,
+            Padding(
+              padding: const EdgeInsets.fromLTRB( 4.0 ,0.0 , 8.0 , 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+
+                  Container(
+                      decoration: BoxDecoration(
+                          color: Colors.limeAccent[200],
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      child:  Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child:  Text(widget.description,
+                            style: TextStyle(color: Colors.black,  fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,),
+                        ),
+                      )),
+                  Icon(
+                    FontAwesomeIcons.trashAlt,
+                    color: get_color(),
+                  ),
+
+                ],
               ),
             ),
             GestureDetector(
@@ -179,6 +207,7 @@ class _PostState extends State<Post> {
                               widget.trashed = !widget.trashed;
                               widget.disliked = widget.disliked ? !widget.disliked : false;
                               vote_function();
+
                             });
                           }),
                       IconButton(
@@ -192,6 +221,7 @@ class _PostState extends State<Post> {
                               widget.disliked = !widget.disliked;
                               widget.trashed = widget.trashed ? !widget.trashed : false;
                               vote_function();
+
                             });
                           }),
                     ],
