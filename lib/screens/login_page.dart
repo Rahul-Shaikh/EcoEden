@@ -5,17 +5,37 @@ import 'package:redux/redux.dart';
 import 'package:ecoeden/redux/app_state.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ecoeden/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../app_routes.dart';
 
 const URL = 'https://api.ecoeden.xyz/auth/';
 
-class LoginPage extends StatelessWidget  {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
 
   //String _email;
   //String _password;
   bool _isLoading = false; // flag to denote if loading
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getState();
+  }
+
+  void getState() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getString('user')!=null)
+      global_store.dispatch(new NavigatePushAction(AppRoutes.home));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +131,7 @@ class LoginPage extends StatelessWidget  {
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
               onPressed: () async {
-              vm.login(_usernameController.text, _passwordController.text,context);
+                vm.login(_usernameController.text, _passwordController.text,context);
               }),
         ),
       );

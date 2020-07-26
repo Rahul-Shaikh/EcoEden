@@ -5,4 +5,5 @@ class AppRoutes {
   static const login = "/login";
   static const feed = "/feed";
   static const camera = "/camera";
+  static const map = "/map";
 }

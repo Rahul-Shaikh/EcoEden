@@ -5,11 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ecoeden/main.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:toast/toast.dart';
-
-import '../main.dart';
-import '../redux/actions.dart';
 
 class ImageInput extends StatefulWidget {
   @override
@@ -26,6 +25,8 @@ class _ImageInput extends State<ImageInput> {
   bool _isUploading = false;
 
   String baseUrl = 'https://api.ecoeden.xyz/photos/';
+
+
   final _descriptionController =  TextEditingController();
 
   void _getImage(BuildContext context, ImageSource source) async {
@@ -35,10 +36,15 @@ class _ImageInput extends State<ImageInput> {
       _imageFile = image;
     });
 
-    global_store.dispatch(new NavigatePopAction());
+    // Closes the bottom sheet
+    Navigator.pop(context);
   }
 
   Future<Map<String, dynamic>> _uploadImage(File image) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jwt = prefs.getString('user');
+
     setState(() {
       _isUploading = true;
     });
@@ -61,9 +67,10 @@ class _ImageInput extends State<ImageInput> {
     // Which creates some problem at the server side to manage
     // or verify the file extension
 //    imageUploadRequest.fields['ext'] = mimeTypeData[1];
-    imageUploadRequest.fields['user'] = 'http://api.ecoeden.xyz/users/1/';
-    imageUploadRequest.fields['lat'] = '30.5928';
-    imageUploadRequest.fields['lng'] = '114.3055';
+    imageUploadRequest.headers['Authorization'] = 'Token '+jwt;
+    imageUploadRequest.fields['user'] = 'http://api.ecoeden.xyz/users/'+global_store.state.user.id.toString()+'/';
+    imageUploadRequest.fields['lat'] = '${res.latitude}';
+    imageUploadRequest.fields['lng'] = '${res.longitude}';
     imageUploadRequest.fields['description'] =  _descriptionController.text;//"Anonymous post";
     imageUploadRequest.files.add(file);
 
@@ -188,6 +195,9 @@ class _ImageInput extends State<ImageInput> {
           //keyboardType: TextInputType.emailAddress,
           autofocus: false,
           decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
             hintText: 'Add a description to your image',
 //          icon: Icon(
 //            Icons.account_circle,
@@ -209,7 +219,7 @@ class _ImageInput extends State<ImageInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Upload Demo'),
+        title: Text('Post Image'),
       ),
       body: SingleChildScrollView(
         child: Column(

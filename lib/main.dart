@@ -2,6 +2,7 @@ import 'package:ecoeden/screens/home_page.dart';
 import 'package:ecoeden/screens/login_page.dart';
 import 'package:ecoeden/screens/signup_page.dart';
 import 'package:ecoeden/screens/splashScreen.dart';
+import 'package:ecoeden/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -12,11 +13,14 @@ import 'package:ecoeden/redux/navigation_middleware.dart';
 import 'package:ecoeden/redux/reducers/app_reducer.dart';
 import 'package:ecoeden/route_aware_widget.dart';
 import 'package:flutter/services.dart' ;
-
+import 'package:ecoeden/screens/map.dart';
 import 'screens/camera_page.dart';
 import 'screens/feeds_page.dart';
+import 'package:geolocator/geolocator.dart';
 
- Store<AppState> global_store;
+Store<AppState> global_store;
+Position res;
+
 void main(){
   global_store = Store<AppState>(
     appReducer,
@@ -42,12 +46,16 @@ class MyApp extends StatelessWidget {
         return MainRoute(HomePage(), settings: settings);
       case AppRoutes.login:
         return MainRoute(LoginPage(), settings: settings);
-     case AppRoutes.signup:
-       return MainRoute(RegisterPage(), settings: settings);
+      case AppRoutes.signup:
+        return MainRoute(RegisterPage(), settings: settings);
       case AppRoutes.camera:
         return MainRoute(ImageInput(), settings: settings);
       case AppRoutes.feed:
         return MainRoute(FeedsPage(), settings: settings);
+      case AppRoutes.map:
+        return MainRoute(MapPage(), settings: settings);
+      case AppRoutes.profile:
+        return MainRoute(ProfilePage(), settings: settings);
       default:
         return MainRoute(LoginPage(), settings: settings);
     }
@@ -69,7 +77,7 @@ class MyApp extends StatelessWidget {
         title: AppLocalizations.appTitle,
         // theme: theme,
         onGenerateRoute: (RouteSettings settings) => _getRoute(settings),
-          home: SplashScreen(),
+        home: SplashScreen(),
       ),
     );
   }
@@ -89,7 +97,7 @@ class MainRoute<T> extends MaterialPageRoute<T> {
     // if (settings.isInitialRoute) return child;
     // Fades between routes. (If you don't want any animation,
     // just return child.)
-     return FadeTransition(opacity: animation, child: child);
+    return FadeTransition(opacity: animation, child: child);
 //    return child;
   }
 }

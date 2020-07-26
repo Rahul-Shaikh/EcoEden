@@ -1,156 +1,238 @@
 import 'package:flutter/material.dart';
+import 'package:ecoeden/main.dart';
+import 'package:ecoeden/screens/feeds_page.dart';
+import 'package:ecoeden/models/feedsArticle.dart';
+import 'package:ecoeden/services/webservice.dart';
+import 'package:ecoeden/models/post.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Profile Page
 
-// Profile Page 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
 
+class _ProfilePageState extends State<ProfilePage> {
+  List<FeedsArticle> _newsArticles = List<FeedsArticle>();
 
-  TextStyle labelStyle = TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.w500);
-  TextStyle normalStyle = TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500);
-  
-  TextStyle selectStyle(String status) {
-    if (status.compareTo('verified') == 0) {
-      return TextStyle(color: Colors.green, fontSize: 16, fontWeight: FontWeight.w300);
-    }
-    else {
-      return TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w300);
+  @override
+  void initState() {
+    super.initState();
+    FeedsPageState.nextPage = 'https://api.ecoeden.xyz/photos/';
+    _fetch();
+  }
+
+  void _fetch() async {
+    while (FeedsPageState.nextPage != null) {
+      await _fetchNewsArticles();
     }
   }
+
+  Future<void> _fetchNewsArticles() async {
+    List<FeedsArticle> newsArticles = await Webservice().load(FeedsArticle.all);
+    setState(() {
+      _newsArticles.addAll(newsArticles);
+    });
+  }
+
+  TextStyle labelStyle =
+  TextStyle(color: Colors.grey, fontSize: 8, fontWeight: FontWeight.w500);
+  TextStyle normalStyle =
+  TextStyle(color: Colors.black, fontSize: 8, fontWeight: FontWeight.w500);
+
+  TextStyle selectStyle(String status) {
+    if (status.compareTo('verified') == 0) {
+      return TextStyle(
+          color: Colors.green, fontSize: 6, fontWeight: FontWeight.w300);
+    } else {
+      return TextStyle(
+          color: Colors.red, fontSize: 6, fontWeight: FontWeight.w300);
+    }
+  }
+
+//  Porny & Bati Productions
   @override
   Widget build(BuildContext context) {
-
-    Widget showDP() {
-      return Center(
-        child: Container( 
-          height: 200.0,
-          width: 200.0,
-          decoration: BoxDecoration(           
-            image: DecorationImage( 
-              fit: BoxFit.cover,
-              image: AssetImage('assets/profile.jpg')
-            ),
-            shape: BoxShape.circle,
-          ),
-        ),
-      );
-    }
-
-    Widget showEdit() {
-      return Center(
-        child: FlatButton(
-          child: Text(
-            'Edit Profile',
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
-          ),
-          onPressed: ()=>{},
-        ),
-      );
-    }
-
-    Widget showFName(String name) {
-      return Container( 
-        padding: EdgeInsets.all(16.0),
-        child: Container( 
-          child: Column( 
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('First Name', style: labelStyle,),
-              Container(height: 10),
-              Text(name,style: normalStyle,)
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget showPhoneNumber(String number, String status) {
-      return Container( 
-        padding: EdgeInsets.all(16.0),
-        child: Container( 
-          child: Column( 
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text('Phone Number', style: labelStyle,),
-                  Text(status, style: selectStyle(status))
-                ],
-              ),
-              Container(height: 10),
-              Text(number,style: normalStyle,)
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget showLName(String name) {
-      return Container( 
-        padding: EdgeInsets.all(16.0),
-        child: Container( 
-          child: Column( 
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('Surname', style: labelStyle,),
-              Container(height: 10),
-              Text(name,style: normalStyle,)
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget showEmail(String email, String status) {
-      return Container( 
-        padding: EdgeInsets.all(16.0),
-        child: Container( 
-          child: Column( 
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text('Email', style: labelStyle,),
-                  Text(status, style: selectStyle(status))
-                ],
-              ),
-              Container(height: 10),
-              Text(email,style: normalStyle,)
-            ],
-          ),
-        ),
-      );
-    }
-
     Widget showProfile() {
-      return Container(
-        padding: EdgeInsets.all(4.0),
-        child: Container(
-          child: ListView(
-
-            children: <Widget>[
-              showDP(),
-              showEdit(),
-              Divider(color: Colors.grey, ),
-              showFName('Shuvayan'),
-              showLName('Ghosh Dastidar'),
-              showPhoneNumber('+91 89021 78247', 'verified'),
-              showEmail('shuvayan.ghosh@gmail.com', 'not verified'),
-            ],
+      print("In Profile");
+      return Column(
+//        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 6, 0, 0),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('You' , style: TextStyle( color: Colors.black , fontSize : 30.0,
+                    fontWeight: FontWeight.bold), textAlign: TextAlign.left,)
+            ),
           ),
-        ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0 ),
+            child: Center(
+              child : Hero(
+                tag: "profile",
+                child: CircleAvatar(
+                  radius: 38.0,
+                  backgroundColor: Colors.lightBlueAccent,
+                  child: Text(
+                    (global_store.state.user.firstName)[0].toString(),
+                    style: TextStyle(fontSize: 40.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 15, 0,  0),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      global_store.state.user.firstName +
+                          " " +
+                          global_store.state.user.lastName,
+                      style: TextStyle(
+                          fontSize: 25.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(global_store.state.user.email,  style: TextStyle(
+                      fontSize: 15.0, fontWeight: FontWeight.bold),
+
+                  ),
+//                        Text(global_store.state.user.mobile),
+                ],
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(70, 20, 70, 10),
+            child: Center(
+              child: Table(
+                border : TableBorder(
+                    horizontalInside: BorderSide(color: Colors.black),
+                    verticalInside: BorderSide(color: Colors.black)
+                ),
+                children: [
+                  TableRow(
+                      children: [
+
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Center(child:
+                          CircleAvatar(
+                            radius: 18.0,
+                            backgroundColor: Colors.red,
+                            child: Icon(
+
+                              FontAwesomeIcons.solidTrashAlt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Center(child:
+                          CircleAvatar(
+                            radius: 18.0,
+                            backgroundColor: Colors.yellow,
+                            child: Icon(
+
+                              FontAwesomeIcons.solidTrashAlt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Center(child:
+                          CircleAvatar(
+                            radius: 18.0,
+                            backgroundColor: Colors.green,
+                            child: Icon(
+
+                              FontAwesomeIcons.solidTrashAlt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                          ),
+                        ),
+                      ]
+                  ),
+                  TableRow(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text(global_store.state.user.posts.toString())),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text(global_store.state.user.collections.toString())),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text(global_store.state.user.verifications.toString())),
+                        ),
+                      ]
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+
+
+
+
+
+          Expanded(
+            flex: 1,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _newsArticles.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Post(
+                  showHeartOverlay: false,
+                  description: _newsArticles[index].description,
+                  imageUrl: _newsArticles[index].image,
+                  upvotes: _newsArticles[index].upvotes,
+                  downvotes: _newsArticles[index].downvotes,
+                  lat: _newsArticles[index].lat,
+                  lng: _newsArticles[index].lng,
+                  id: _newsArticles[index].id,
+                  user: _newsArticles[index].user,
+                  activity: _newsArticles[index].activity,
+                );
+              },
+            ),
+          ),
+        ],
       );
     }
-
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+//        title: Text('Profile'),
+          backgroundColor: Color.fromRGBO(250,250, 250, 1),
+          elevation: 0,
+          leading : BackButton(
+              color: Colors.black
+          )
       ),
-
       body: Stack(
         children: <Widget>[
           showProfile(),

@@ -8,23 +8,25 @@ class FeedsArticle {
   final String image;
   final String createdAt;
   final bool trash;
-  final String user;
   final String lat;
   final String lng;
   final String description;
   final int upvotes;
   final int downvotes;
+  final Map<String,dynamic> user;
+  final List<dynamic> activity;
 
   FeedsArticle({this.id,
     this.image,
     this.createdAt,
     this.trash,
-    this.user,
     this.lat,
     this.lng,
     this.description,
     this.downvotes,
-    this.upvotes
+    this.upvotes,
+    this.user,
+    this.activity
   });
 
   factory FeedsArticle.fromJson(Map<String,dynamic> json) {
@@ -39,6 +41,7 @@ class FeedsArticle {
       description : json['description'],
       upvotes:  json['upvotes'],
       downvotes: json['downvotes'],
+      activity: json['activity']
     );
 
   }

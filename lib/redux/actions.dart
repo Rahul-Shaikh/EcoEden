@@ -47,6 +47,14 @@ class NavigatePopAction {
   }
 }
 
+class NavigateClearAction {
+
+  @override
+  String toString() {
+    return 'NavigateClearAction{}';
+  }
+}
+
 class LoadingStartAction{
   @override
   String toString() {
@@ -55,9 +63,34 @@ class LoadingStartAction{
 }
 
 class LoadingEndAction{
+
+
   @override
   String toString() {
     return 'LoadingEndAction';
+  }
+}
+
+class LatAction{
+
+  final String lat;
+  LatAction(this.lat);
+
+  @override
+  String toString() {
+    return 'LatAction';
+  }
+}
+
+class LngAction{
+
+  final String lng;
+
+  LngAction(this.lng);
+
+  @override
+  String toString() {
+    return 'LngAction';
   }
 }
 
@@ -71,18 +104,31 @@ class LogoutAction{
   ThunkAction<AppState> logout() {
     print('Inside logout');
     return (Store<AppState> store) async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        print(prefs.getString('user'));
-        if (prefs.getString('user') != null) {
-          prefs.remove('user');
-        }
-        print(prefs.getString('user'));
-        print(store.state.route.toString());
-        store.dispatch(NavigatePushAction(AppRoutes.login));
-        print(store.state.route.toString());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getString('user'));
+      if (prefs.getString('user') != null) {
+        prefs.remove('user');
+      }
+      print(prefs.getString('user'));
+      print(store.state.route.toString());
+      store.dispatch(NavigatePushAction(AppRoutes.login));
+      print(store.state.route.toString());
     };
   }
 }
+
+class userAction{
+  final User user;
+
+  userAction(this.user);
+
+  @override
+  String toString() {
+    return 'userAction';
+  }
+
+}
+
 
 class SignupAction{
   final User user;
@@ -103,10 +149,10 @@ class SignupAction{
 
       createUser( CREATE_POST_URL , body: user.toMap() ).then((user) => {
         store.dispatch(LoadingEndAction()),
-      if (user.userName == null) {
-      Toast.show("Username exists or Wrong Credentials!!!", context,
-      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
-      }else {
+        if (user.userName == null) {
+          Toast.show("Username exists or Wrong Credentials!!!", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+        }else {
           store.dispatch(NavigatePushAction(AppRoutes.login)),
         }
       }).catchError((e){
@@ -146,13 +192,13 @@ class LoginAction{
 
       await attemptLogIn(username, password).then((String jwt) => {
         store.dispatch(LoadingEndAction()),
-      if (jwt == null) {
+        if (jwt == null) {
           Toast.show("Incorrect username or password!!!", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
-      }else{
-        prefs.setString('user', jwt),
-        store.dispatch(NavigatePushAction(AppRoutes.home)),
-      }
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+        }else{
+          prefs.setString('user', jwt),
+          store.dispatch(NavigatePushAction(AppRoutes.home)),
+        }
       }).catchError((e){
         print(e);
       });
