@@ -45,7 +45,8 @@ dependencies:
   toast: ^0.1.5
   cached_network_image: ^2.2.0+1
   loading_overlay: ^0.2.1
-  
+  animated_text_kit: ^2.2.0
+  path_drawing: ^0.4.1
 
 
 
